@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.itau.dashboard.dao.AlarmeDAO;
 import br.com.itau.dashboard.dao.EventoDAO;
+import br.com.itau.dashboard.model.Alarme;
 import br.com.itau.dashboard.model.Evento;
 import br.com.itau.dashboard.model.Intervalo;
+import br.com.itau.dashboard.model.Totais;
 
 @CrossOrigin("*")
 @RestController
@@ -20,6 +23,9 @@ public class EventoController {
 	
 	@Autowired
 	private EventoDAO dao;
+	
+	@Autowired
+	private AlarmeDAO dao2;
 	
 	
 	@GetMapping("/eventos")
@@ -43,15 +49,25 @@ public class EventoController {
 		}
 	}
 	
-	/*
+	
 	@PostMapping("alarmes/total")
-	public ResponseEntity<ArrayList<Evento>> getTotalAlarme(@RequestBody Intervalo intervalo){
-		ArrayList<Evento> lista = dao.findByAlarmeAndData(intervalo.getInicio(), intervalo.getFim());
-		if(lista.size()==0) {
-			return ResponseEntity.status(404).build();
-		}else {
-			return ResponseEntity.ok(lista);
+	public ResponseEntity<ArrayList<Totais>> getTotalAlarme(@RequestBody Intervalo intervalo){
+		int alarmeid=1;
+		int total = 0;
+		Totais soma = new Totais();
+		ArrayList<Totais> lista = new ArrayList<Totais>();
+		for(alarmeid=1;alarmeid<=5;alarmeid+=1) {
+			total = dao.findByAlarmeAndData(alarmeid,intervalo.getInicio(), intervalo.getFim());
+			soma = new Totais();
+			soma.setAlarmeid(alarmeid);
+			soma.setSoma(total);
+			Alarme objeto = (Alarme) dao2.findById(alarmeid).orElse(null);
+			soma.setNomeAlarme(objeto.getNome());
+			lista.add(soma);
+			}
+		return ResponseEntity.ok(lista);
 		}
-	}
-	*/
+		
+
+	
 }

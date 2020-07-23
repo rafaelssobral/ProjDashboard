@@ -15,7 +15,7 @@ public interface EventoDAO extends CrudRepository<Evento,Integer>{
 	@Query(value="SELECT * from itmn_evento where itmn_evento.data_evt >= :inicio and itmn_evento.data_evt <= :fim",nativeQuery=true)
 	ArrayList<Evento> getByData(@Param("inicio") Date inicio, @Param("fim") Date fim);
 
-	@Query(value="SELECT COUNT(alarme_id_alarme) AS TOTAL FROM itmn_evento WHERE alarme_id_alarme LIKE ?1 and itmn_evento.data_evt >= :inicio and itmn_evento.data_evt <= :fim",nativeQuery=true)
-	int findByAlarmeAndData(int alarme,@Param("inicio") Date inicio, @Param("fim") Date fim);
+	@Query(value="SELECT COUNT(alarme_id_alarme) AS TOTAL FROM itmn_evento WHERE alarme_id_alarme LIKE :alarmeid and itmn_evento.data_evt >= :inicio and itmn_evento.data_evt <= :fim",nativeQuery=true)
+	int findByAlarmeAndData(@Param("alarmeid") int alarmeid,@Param("inicio") Date inicio, @Param("fim") Date fim);
 	
 }
